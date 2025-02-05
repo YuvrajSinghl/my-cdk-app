@@ -14,26 +14,31 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    environment: prod  # Specify the environment name here
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/CDKDeployRole
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Install Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          npm install -g aws-cdk # Install the AWS CDK globally
+          npm install           # Install project dependencies
 
       - name: Build CDK Project
         run: npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy CDK Stack
         run: npx cdk deploy --require-approval never

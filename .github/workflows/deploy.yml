@@ -1,0 +1,39 @@
+name: Deploy S3 Bucket via AWS CDK
+
+on:
+  push:
+    branches:
+      - main  # Deploy only when pushing to 'main'
+  workflow_dispatch:  # Allows manual trigger
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/CDKDeployRole
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build CDK Project
+        run: npm run build
+
+      - name: Deploy CDK Stack
+        run: npx cdk deploy --require-approval never

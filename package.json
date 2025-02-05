@@ -1,0 +1,22 @@
+{
+    "name": "my-cdk-project",
+    "version": "1.0.0",
+    "description": "AWS CDK project to deploy an S3 bucket with lifecycle and versioning",
+    "main": "index.js",
+    "scripts": {
+      "build": "tsc",                   
+      "deploy": "cdk deploy --require-approval never"
+    },
+    "dependencies": {
+      "aws-cdk-lib": "^2.0.0",            
+      "constructs": "^10.0.0",            
+      "cdk-assets": "^2.0.0"             
+    },
+    "devDependencies": {
+      "typescript": "^4.4.0",             
+      "@types/node": "^16.0.0"            
+    },
+    "author": "Your Name",
+    "license": "ISC"
+  }
+  

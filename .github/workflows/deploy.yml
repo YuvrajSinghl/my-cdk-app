@@ -41,5 +41,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+
       - name: Deploy CDK Stack
-        run: cd infra && npx cdk deploy --require-approval never
+        run: cd infra && npx cdk deploy --app "npx ts-node bin/my-cdk-app.ts" --require-approval never

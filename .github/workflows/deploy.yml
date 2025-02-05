@@ -27,11 +27,12 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          cd infra
           npm install -g aws-cdk # Install the AWS CDK globally
           npm install           # Install project dependencies
 
       - name: Build CDK Project
-        run: npm run build
+        run: cd infra && npm run build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -41,4 +42,4 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy CDK Stack
-        run: npx cdk deploy --require-approval never
+        run: cd infra && npx cdk deploy --require-approval never
